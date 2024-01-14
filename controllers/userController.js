@@ -119,6 +119,15 @@ exports.register = async (req, res) => {
         .json({ error: "Số điện thoại đã tồn tại trong hệ thống." });
     }
 
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error:
+          "Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất một chữ thường, một chữ hoa, một số, và một ký tự đặc biệt.",
+      });
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
